@@ -5,9 +5,12 @@ Android 4.4以下：
 
 2、设置->安全->加密手机，此时界面上有如下提示：
 
-<img src="/image/encryp_after.png" />
+<img src="/image/encryp_pre.png" />
 
 3、加密手机后，再一次进入：设置->安全->屏幕锁定，此时可以看到除了PIN和密码选项之外，其他选项都是置灰的，如下：
+
+<img src="/image/encryp_after.png" />
+
 
 但是在4.4以上的版本中，发现手机加密之后，所有屏幕锁定选项都是可以选择的。
 
