@@ -14,7 +14,7 @@ Android 4.4以下：
 
 但是在4.4以上的版本中，发现手机加密之后，所有屏幕锁定选项都是可以选择的。
 
-在ChooseLockGeneric.java中
+首先，研究下Settings中，将锁屏模式置灰的逻辑，在ChooseLockGeneric.java中，代码如下：
 
 ```
         /***
@@ -56,7 +56,7 @@ Android 4.4以下：
             }
         }
 ```
-quality决定着锁屏模式下的可选项，于是追溯quality的设值：
+以上代码的if-else逻辑中，可以看到上图五种锁屏模式，enabled标识该模式是否可用,quality与DevicePolicyManager的锁屏级别大小决定着enabled的值为true或者false，于是追溯quality的设值，该类中最终决定quality值的代码如下：
 ```
         private int upgradeQualityForEncryption(int quality) {
             int encryptionStatus = mDPM.getStorageEncryptionStatus();
@@ -78,7 +78,7 @@ quality决定着锁屏模式下的可选项，于是追溯quality的设值：
 ```
 static final int MIN_PASSWORD_QUALITY = DevicePolicyManager.PASSWORD_QUALITY_NUMERIC;
 ```
-也就是符合条件的情况下，quality的值最终为PASSWORD_QUALITY_NUMERIC，即PIN加密的级别，再对应disableUnusablePreferences的逻辑，此时只有PIN和密码的锁屏模式可用。
+也就是符合条件的情况下，quality的值最终为PASSWORD_QUALITY_NUMERIC，即PIN加密的级别，再对应disableUnusablePreferences()的逻辑，此时只有PIN和密码的锁屏模式可用。
 
 于是脱离这个繁杂aosp环境，直接写个简单的demo测试一下，代码如下：
 ```
