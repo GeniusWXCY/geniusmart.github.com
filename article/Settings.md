@@ -56,7 +56,7 @@ Android 4.4以下：
             }
         }
 ```
-以上代码的if-else逻辑中，可以看到上图五种锁屏模式，enabled标识该模式是否可用,quality与DevicePolicyManager的锁屏级别大小决定着enabled的值为true或者false，于是追溯quality的设值，该类中最终决定quality值的代码如下：
+以上代码的if-else逻辑中，可以看到上图五种锁屏模式，**enabled标识该模式是否可用,quality与DevicePolicyManager的锁屏级别大小决定着enabled的值为true或者false**，于是追溯quality的设值，该类中最终决定quality值的代码如下：
 ```
         private int upgradeQualityForEncryption(int quality) {
             int encryptionStatus = mDPM.getStorageEncryptionStatus();
@@ -74,11 +74,11 @@ Android 4.4以下：
 ```
  encryptionStatus = mDPM.getStorageEncryptionStatus();
 ```
-大概原理是：通过DevicePolicyManager获取当前的加密策略，如果取值为ENCRYPTION_STATUS_ACTIVATING或ENCRYPTION_STATUS_ACTIVATING，则将quality赋值为CryptKeeperSettings.MIN_PASSWORD_QUALITY，查看其值，发现：
+大概原理是：通过DevicePolicyManager获取当前的加密策略，如果取值为ENCRYPTION_STATUS_ACTIVE或ENCRYPTION_STATUS_ACTIVATING，则将quality赋值为CryptKeeperSettings.MIN_PASSWORD_QUALITY，查看其值，发现：
 ```
 static final int MIN_PASSWORD_QUALITY = DevicePolicyManager.PASSWORD_QUALITY_NUMERIC;
 ```
-也就是符合条件的情况下，quality的值最终为PASSWORD_QUALITY_NUMERIC，即PIN加密的级别，再对应disableUnusablePreferences()的逻辑，此时只有PIN和密码的锁屏模式可用。
+**也就是符合条件的情况下，quality的值最终为PASSWORD_QUALITY_NUMERIC，即PIN加密的级别，再对应disableUnusablePreferences()的逻辑，此时只有PIN和密码的锁屏模式可用。**
 
 于是脱离这个繁杂aosp环境，直接写个简单的demo测试一下，代码如下：
 ```
@@ -91,8 +91,8 @@ Log.e("Genius", "checkSecuritySettingsSufficient: encryptionStatus=" + encryptio
 手机加密前,encryptionStatus=1
 手机加密后,encryptionStatus=3
 
-4.4和4.4以上的情况：
-无论手机加密前或是加密后，encryptionStatus恒等于1
+**4.4和4.4以上的情况：
+无论手机加密前或是加密后，encryptionStatus恒等于1**
 
 于是追查getStorageEncryptionStatus的源码：
 在这个位置下：
